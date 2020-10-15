@@ -12,6 +12,7 @@ export default Vue.extend({})
 
 <style lang="scss" scoped>
 #app {
+  position: relative;
   height: 100vh;
 }
 </style>

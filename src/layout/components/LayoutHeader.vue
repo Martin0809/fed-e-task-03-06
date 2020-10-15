@@ -65,7 +65,7 @@ export default Vue.extend({
   cursor: pointer;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.025);
+    background: $black025-color;
   }
 }
 

@@ -24,6 +24,11 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "login" */ '../views/Login.vue'),
   },
+  {
+    path: '*',
+    name: 'ErrorPage',
+    component: () => import(/* webpackChunkName: "login" */ '../views/404.vue'),
+  },
 ]
 
 const router = new VueRouter({
