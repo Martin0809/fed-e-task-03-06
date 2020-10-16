@@ -5,6 +5,10 @@ export function login(params: { phone: string; password: string }) {
   return request.post('/front/user/login', qs.stringify(params))
 }
 
+export function logout() {
+  return request.post('/front/user/logout')
+}
+
 export function getUserInfo() {
-  console.log(1)
+  return request.get('/front/user/getInfo')
 }

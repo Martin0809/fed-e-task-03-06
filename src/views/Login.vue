@@ -64,18 +64,21 @@ export default Vue.extend({
         const { data } = await login(this.form)
 
         if (data.state !== 1) {
-          this.$message.error(data.message)
-        } else {
-          this.$message.success('登录成功')
-          this.$router.push({
-            path: '/',
-          })
+          return this.$message.error(data.message)
         }
+
+        this.$message.success('登录成功')
+        this.$store.commit('setUser', data.content)
+        this.$router.push({
+          path: (this.$route.query.redirect as string) || '/',
+        })
       } catch (err) {
         console.log('登录失败', err)
       }
 
       this.isLoading = false
+
+      return false
     },
   },
 })

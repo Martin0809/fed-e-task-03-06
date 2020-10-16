@@ -6,14 +6,16 @@
     </div>
     <el-dropdown>
       <el-avatar
-        src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+        :src="
+          userInfo.portrait ||
+            'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+        "
         :size="36"
-      />
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>马马马赛克</el-dropdown-item>
-        <div @click="logout">
-          <el-dropdown-item divided>退出登陆</el-dropdown-item>
-        </div>
+      /><el-dropdown-menu slot="dropdown">
+        <el-dropdown-item>{{ userInfo.userName }}</el-dropdown-item>
+        <el-dropdown-item divided @click.native="logout">
+          退出登录
+        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </el-header>
@@ -21,6 +23,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { getUserInfo } from '@/services/user'
 
 export default Vue.extend({
   name: 'LayoutHeader',
@@ -30,13 +33,42 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      userInfo: {},
+    }
+  },
+  created() {
+    this.fetchUserInfo()
+    this.fetchUserInfo()
+    this.fetchUserInfo()
+  },
   methods: {
+    async fetchUserInfo() {
+      try {
+        const { data } = await getUserInfo()
+
+        if (data.state === 1) {
+          this.userInfo = data.content
+        }
+      } catch (err) {
+        this.$message.error(err.message)
+      }
+    },
     handleTriggerCollapse() {
       this.$emit('triggerCollapse', !this.isCollapse)
     },
     logout() {
-      this.$router.push({
-        path: '/login',
+      this.$confirm('确定退出吗？', '退出提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.$message.success('退出成功')
+        this.$store.commit('setUser', null)
+        this.$router.push({
+          path: '/login',
+        })
       })
     },
   },
