@@ -71,9 +71,9 @@
       <el-pagination
         background
         layout="total, sizes, prev, pager, next, jumper"
-        :current-page="form.current"
+        :current-page="Number(form.current)"
         :page-sizes="[10, 20, 50, 100]"
-        :page-size="form.size"
+        :page-size="Number(form.size)"
         :total="total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -84,6 +84,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import qs from 'qs'
 import { Form } from 'element-ui'
 import { getAllResource, getAllCategory } from '@/services/resource'
 
@@ -98,15 +99,19 @@ export default Vue.extend({
         categoryId: undefined,
         current: 1,
         size: 10,
+        ...this.$route.query,
       },
       categories: [],
       resources: [],
       total: 0,
     }
   },
-  mounted() {
+  created() {
     this.fetchResources()
     this.fetchCategories()
+  },
+  watch: {
+    $route: 'fetchResources',
   },
   methods: {
     async fetchResources() {
@@ -130,27 +135,35 @@ export default Vue.extend({
         this.categories = data.data
       }
     },
+    handleJumpLink() {
+      const link = `/resource?${qs.stringify(this.form)}`
+
+      if (this.$route.fullPath === link) return
+
+      this.$router.push(link)
+    },
     handleReset() {
       ;(this.$refs.form as Form).resetFields()
       this.form.current = 1
+      this.form.size = 10
 
-      this.fetchResources()
+      this.handleJumpLink()
     },
     handleSubmit() {
       this.form.current = 1
 
-      this.fetchResources()
+      this.handleJumpLink()
     },
     handleSizeChange(val: number) {
       this.form.size = val
       this.form.current = 1
 
-      this.fetchResources()
+      this.handleJumpLink()
     },
     handleCurrentChange(val: number) {
       this.form.current = val
 
-      this.fetchResources()
+      this.handleJumpLink()
     },
   },
 })

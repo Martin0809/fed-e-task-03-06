@@ -111,7 +111,7 @@ export default Vue.extend({
       parentMenus: [],
     }
   },
-  mounted() {
+  created() {
     this.fetchMenuInfo()
   },
   methods: {

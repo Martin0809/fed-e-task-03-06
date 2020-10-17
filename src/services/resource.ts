@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function getAllResource(
   params: {
-    id?: number
+    id?: number | string
     name?: string
     startCreateTime?: string
     url?: string
-    categoryId?: number
+    categoryId?: number | string
     endCreateTime?: string
-    current?: number
-    size?: number
+    current?: number | string
+    size?: number | string
   } = {}
 ) {
   return request.post('/boss/resource/getResourcePages', params)

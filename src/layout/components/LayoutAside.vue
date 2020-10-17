@@ -64,7 +64,7 @@ export default Vue.extend({
       menus: [],
     }
   },
-  mounted() {
+  created() {
     this.fetchMenu()
   },
   methods: {
