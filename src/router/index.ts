@@ -30,29 +30,27 @@ const routes: Array<RouteConfig> = [
         path: '/menu',
         name: 'MenuIndex',
         component: () =>
-          import(/* webpackChunkName: "home" */ '../views/menu/index.vue'),
+          import(/* webpackChunkName: "menu" */ '../views/menu/index.vue'),
       },
       {
         path: '/menu/add',
-        name: 'CreateOrEdit',
+        name: 'MenuCreate',
         component: () =>
           import(
-            /* webpackChunkName: "home" */ '../views/menu/CreateOrEdit.vue'
+            /* webpackChunkName: "menu-create" */ '../views/menu/Create.vue'
           ),
       },
       {
         path: '/menu/:id/edit',
-        name: 'CreateOrEdit',
+        name: 'MenuEdit',
         component: () =>
-          import(
-            /* webpackChunkName: "home" */ '../views/menu/CreateOrEdit.vue'
-          ),
+          import(/* webpackChunkName: "menu-edit" */ '../views/menu/Edit.vue'),
       },
       {
         path: '*',
         name: 'ErrorPage',
         component: () =>
-          import(/* webpackChunkName: "login" */ '../views/404.vue'),
+          import(/* webpackChunkName: "error-page" */ '../views/404.vue'),
       },
     ],
   },

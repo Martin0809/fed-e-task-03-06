@@ -18,9 +18,13 @@
       </el-table-column>
       <el-table-column prop="orderNum" label="排序" align="center" />
       <el-table-column label="操作" align="center">
-        <template>
-          <el-button size="mini">编辑</el-button>
-          <el-button size="mini" type="danger">删除</el-button>
+        <template slot-scope="scope">
+          <el-button size="mini" @click="handleEdit(scope.row)">
+            编辑
+          </el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">
+            删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -29,7 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { getAllMenu } from '@/services/menu'
+import { getAllMenu, deleteMenu } from '@/services/menu'
 
 export default Vue.extend({
   name: 'MenuIndex',
@@ -57,6 +61,21 @@ export default Vue.extend({
     addMenu() {
       this.$router.push({
         path: '/menu/add',
+      })
+    },
+    handleEdit(record: any) {
+      this.$router.push({
+        path: `/menu/${record.id}/edit`,
+      })
+    },
+    handleDelete(record: any) {
+      this.$confirm('确定删除吗？', '删除提示', {}).then(async () => {
+        const { data } = await deleteMenu(record.id)
+
+        if (data.code === '000000') {
+          this.$message.success('删除成功')
+          this.fetchMenus()
+        }
       })
     },
   },
