@@ -84,7 +84,6 @@
       :id="id"
       :categories="categories"
       @ok="fetchResources"
-      @cancel="triggerDialog"
     />
   </div>
 </template>
@@ -185,18 +184,13 @@ export default Vue.extend({
 
       this.handleJumpLink()
     },
-    triggerDialog() {
-      this.visible = !this.visible
-    },
     handleAdd() {
       this.id = 0
-
-      this.triggerDialog()
+      this.visible = true
     },
     handleEdit(record: any) {
       this.id = record.id
-
-      this.triggerDialog()
+      this.visible = true
     },
     handleDelete(record: any) {
       this.$confirm('确定删除吗？', '删除提示').then(async () => {

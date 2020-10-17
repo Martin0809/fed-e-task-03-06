@@ -19,7 +19,7 @@ export function getAllResource(
   return request.post('/boss/resource/getResourcePages', params)
 }
 
-export function getResource(id: string) {
+export function getResource(id: number | string) {
   return request.get(`/boss/resource/${id}`)
 }
 

@@ -3,61 +3,74 @@
     destroy-on-close
     :title="`${id ? '编辑' : '添加'}资源`"
     :visible="visible"
-    @close="handleCancel"
+    @open="fetchResource"
+    @close="handleClose"
   >
-    <el-form ref="form" style="width: 80%" :model="form" :rules="rules">
-      <el-form-item label="资源名称" prop="name" :label-width="formLabelWidth">
-        <el-input
-          v-model="form.name"
-          autocomplete="off"
-          placeholder="请输入"
-          :disabled="isSubmiting"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="资源路径" prop="url" :label-width="formLabelWidth">
-        <el-input
-          v-model="form.url"
-          autocomplete="off"
-          placeholder="请输入"
-          :disabled="isSubmiting"
-        ></el-input>
-      </el-form-item>
-      <el-form-item
-        label="资源分类"
-        prop="categoryId"
-        :label-width="formLabelWidth"
-      >
-        <el-select
-          v-model="form.categoryId"
-          clearable
-          placeholder="请选择"
-          :disabled="isSubmiting"
-        >
-          <el-option
-            v-for="category in categories"
-            :key="category.id"
-            :label="category.name"
-            :value="category.id"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item
-        label="描述"
-        prop="description"
-        :label-width="formLabelWidth"
-      >
-        <el-input
-          v-model="form.description"
-          type="textarea"
-          autocomplete="off"
-          placeholder="请输入"
-          :rows="3"
-          :disabled="isSubmiting"
-        ></el-input>
-      </el-form-item>
+    <el-form v-loading="isLoading" ref="form" :model="form" :rules="rules">
+      <el-row>
+        <el-col :span="20">
+          <el-form-item
+            label="资源名称"
+            prop="name"
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              v-model="form.name"
+              autocomplete="off"
+              placeholder="请输入"
+              :disabled="isSubmiting"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="资源路径"
+            prop="url"
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              v-model="form.url"
+              autocomplete="off"
+              placeholder="请输入"
+              :disabled="isSubmiting"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="资源分类"
+            prop="categoryId"
+            :label-width="formLabelWidth"
+          >
+            <el-select
+              v-model="form.categoryId"
+              clearable
+              placeholder="请选择"
+              :disabled="isSubmiting"
+            >
+              <el-option
+                v-for="category in categories"
+                :key="category.id"
+                :label="category.name"
+                :value="category.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="描述"
+            prop="description"
+            :label-width="formLabelWidth"
+          >
+            <el-input
+              v-model="form.description"
+              type="textarea"
+              autocomplete="off"
+              placeholder="请输入"
+              :rows="3"
+              :disabled="isSubmiting"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer">
-      <el-button :disabled="isSubmiting" @click="handleCancel">取 消</el-button>
+      <el-button :disabled="isSubmiting" @click="handleClose">取 消</el-button>
       <el-button type="primary" :loading="isSubmiting" @click="handleSubmit">
         确 定
       </el-button>
@@ -68,7 +81,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Form } from 'element-ui'
-import { createOrSaveResource } from '@/services/resource'
+import { getResource, createOrSaveResource } from '@/services/resource'
 
 export default Vue.extend({
   name: 'CreateOrEditDialog',
@@ -85,6 +98,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      isLoading: false,
       isSubmiting: false,
       formLabelWidth: '120px',
       form: {
@@ -103,8 +117,20 @@ export default Vue.extend({
     }
   },
   methods: {
-    handleCancel() {
-      this.$emit('update:visible', false)
+    async fetchResource() {
+      if (!this.id) return
+
+      this.isLoading = true
+
+      try {
+        const { data } = await getResource(this.id)
+
+        if (data.code === '000000') {
+          this.form = data.data
+        }
+      } finally {
+        this.isLoading = false
+      }
     },
     async handleSubmit() {
       try {
@@ -117,13 +143,17 @@ export default Vue.extend({
         if (data.code === '000000') {
           this.$message.success(`${this.id ? '编辑' : '添加'}成功`)
           this.$emit('ok')
-          this.handleCancel()
+          this.handleClose()
         }
       } catch (error) {
         console.error('表单提交失败', error)
       } finally {
         this.isSubmiting = false
       }
+    },
+    handleClose() {
+      ;(this.$refs.form as Form).resetFields()
+      this.$emit('update:visible', false)
     },
   },
 })
