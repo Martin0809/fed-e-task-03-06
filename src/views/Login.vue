@@ -73,7 +73,7 @@ export default Vue.extend({
           path: (this.$route.query.redirect as string) || '/',
         })
       } catch (err) {
-        console.log('登录失败', err)
+        console.error('登录失败', err)
       }
 
       this.isLoading = false

@@ -24,7 +24,7 @@
                   v-for="category in categories"
                   :key="category.id"
                   :label="category.name"
-                  :value="category.id"
+                  :value="String(category.id)"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -40,7 +40,7 @@
     </el-card>
     <el-card v-loading="isLoading" shadow="never">
       <div class="operate-bar">
-        <el-button>添加资源</el-button>
+        <el-button @click="handleAdd">添加资源</el-button>
         <el-button>资源分类</el-button>
       </div>
       <el-table border stripe style="width: 100%" :data="resources">
@@ -79,6 +79,13 @@
         @current-change="handleCurrentChange"
       />
     </el-card>
+    <create-or-edit-dialog
+      :visible.sync="visible"
+      :id="id"
+      :categories="categories"
+      @ok="fetchResources"
+      @cancel="triggerDialog"
+    />
   </div>
 </template>
 
@@ -86,10 +93,18 @@
 import Vue from 'vue'
 import qs from 'qs'
 import { Form } from 'element-ui'
-import { getAllResource, getAllCategory } from '@/services/resource'
+import {
+  getAllResource,
+  getAllCategory,
+  deleteResource,
+} from '@/services/resource'
+import CreateOrEditDialog from './components/CreateOrEditDialog.vue'
 
 export default Vue.extend({
   name: 'ResourceIndex',
+  components: {
+    CreateOrEditDialog,
+  },
   data() {
     return {
       isLoading: false,
@@ -99,14 +114,15 @@ export default Vue.extend({
         categoryId: undefined,
         current: 1,
         size: 10,
-        ...this.$route.query,
       },
       categories: [],
       resources: [],
       total: 0,
+      visible: false,
+      id: 0,
     }
   },
-  created() {
+  mounted() {
     this.fetchResources()
     this.fetchCategories()
   },
@@ -116,6 +132,10 @@ export default Vue.extend({
   methods: {
     async fetchResources() {
       this.isLoading = true
+      this.form = {
+        ...this.form,
+        ...this.$route.query,
+      }
 
       try {
         const { data } = await getAllResource(this.form)
@@ -164,6 +184,28 @@ export default Vue.extend({
       this.form.current = val
 
       this.handleJumpLink()
+    },
+    triggerDialog() {
+      this.visible = !this.visible
+    },
+    handleAdd() {
+      this.id = 0
+
+      this.triggerDialog()
+    },
+    handleEdit(record: any) {
+      this.id = record.id
+
+      this.triggerDialog()
+    },
+    handleDelete(record: any) {
+      this.$confirm('确定删除吗？', '删除提示').then(async () => {
+        const { data } = await deleteResource(record.id)
+
+        if (data.code === '000000') {
+          this.fetchResources()
+        }
+      })
     },
   },
 })
