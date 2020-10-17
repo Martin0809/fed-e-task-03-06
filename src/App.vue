@@ -13,6 +13,7 @@ export default Vue.extend({})
 <style lang="scss" scoped>
 #app {
   position: relative;
+  min-width: 1000px;
   height: 100vh;
 }
 </style>

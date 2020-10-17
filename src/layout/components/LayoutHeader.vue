@@ -40,8 +40,6 @@ export default Vue.extend({
   },
   created() {
     this.fetchUserInfo()
-    this.fetchUserInfo()
-    this.fetchUserInfo()
   },
   methods: {
     async fetchUserInfo() {

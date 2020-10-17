@@ -4,7 +4,6 @@
       <img alt="Vue logo" src="@/assets/logo.png" />
     </div>
     <el-menu
-      default-active="/course"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b"
@@ -13,37 +12,46 @@
       @open="handleOpen"
       @close="handleClose"
     >
-      <el-submenu index="authority">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>权限管理</span>
-        </template>
-        <el-menu-item index="/role">角色列表</el-menu-item>
-        <el-menu-item index="/menu">菜单列表</el-menu-item>
-        <el-menu-item index="/resource">资源列表</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="/course">
-        <i class="el-icon-menu"></i>
-        <span slot="title">课程管理</span>
-      </el-menu-item>
-      <el-menu-item index="/user">
-        <i class="el-icon-document"></i>
-        <span slot="title">用户管理</span>
-      </el-menu-item>
-      <el-submenu index="advert">
-        <template slot="title">
-          <i class="el-icon-location"></i>
-          <span>广告管理</span>
-        </template>
-        <el-menu-item index="/advert">广告列表</el-menu-item>
-        <el-menu-item index="/advert-space">广告位列表</el-menu-item>
-      </el-submenu>
+      <template v-for="menu in menus">
+        <el-submenu
+          v-if="
+            menu.subMenuList &&
+              menu.subMenuList.filter((item) => item.shown).length
+          "
+          :key="menu.id"
+          :index="`${menu.id}`"
+        >
+          <template slot="title">
+            <i :class="`el-icon-${menu.icon}`"></i>
+            <span>{{ menu.name }}</span>
+          </template>
+          <el-menu-item
+            v-for="subMenu in menu.subMenuList.filter((item) => item.shown)"
+            :key="subMenu.id"
+            :index="`/${subMenu.href.toLowerCase()}`"
+          >
+            <template slot="title">
+              <i :class="`el-icon-${subMenu.icon}`"></i>
+              <span>{{ subMenu.name }}</span>
+            </template>
+          </el-menu-item>
+        </el-submenu>
+        <el-menu-item
+          v-else
+          :key="menu.id"
+          :index="`/${menu.href.toLowerCase()}`"
+        >
+          <i :class="`el-icon-${menu.icon}`"></i>
+          <span slot="title">{{ menu.name }}</span>
+        </el-menu-item>
+      </template>
     </el-menu>
   </el-aside>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { getMenuNodeList } from '@/services/menu'
 
 export default Vue.extend({
   name: 'LayoutAside',
@@ -53,12 +61,21 @@ export default Vue.extend({
       required: true,
     },
   },
+  data() {
+    return {
+      menus: [],
+    }
+  },
+  mounted() {
+    this.fetchMenu()
+  },
   methods: {
-    handleOpen(key: string, keyPath: string) {
-      console.log(key, keyPath)
-    },
-    handleClose(key: string, keyPath: string) {
-      console.log(key, keyPath)
+    async fetchMenu() {
+      const { data } = await getMenuNodeList()
+
+      if (data.code === '000000') {
+        this.menus = data.data
+      }
     },
   },
 })
