@@ -120,19 +120,21 @@ export default Vue.extend({
         this.isLoading = true
       }
 
-      const { data } = await getMenuInfo(this.$route.params.id || -1)
+      try {
+        const { data } = await getMenuInfo(this.$route.params.id || -1)
 
-      if (data.code === '000000') {
-        const { menuInfo, parentMenuList } = data.data
+        if (data.code === '000000') {
+          const { menuInfo, parentMenuList } = data.data
 
-        if (menuInfo) {
-          this.form = menuInfo
+          if (menuInfo) {
+            this.form = menuInfo
+          }
+
+          this.parentMenus = parentMenuList
         }
-
-        this.parentMenus = parentMenuList
+      } finally {
+        this.isLoading = false
       }
-
-      this.isLoading = false
     },
     async handleSubmit() {
       this.isSubmiting = true

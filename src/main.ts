@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import dayjs from 'dayjs'
 import ElementUI from 'element-ui'
 import App from './App.vue'
 import router from './router'
@@ -15,9 +16,16 @@ Vue.filter('level2word', (level: number): string => {
   return `${map[level]}级`
 })
 
-Vue.filter('formatUrl', (value: string): string => {
-  return `/${value.toLowerCase()}`
+Vue.filter('formatUrl', (url: string): string => {
+  return `/${url.replace(/^\//, '').toLowerCase()}`
 })
+
+Vue.filter(
+  'formatDate',
+  (date: number, format = 'YYYY-MM-DD HH:mm:ss'): string => {
+    return dayjs().format(format)
+  }
+)
 
 new Vue({
   router,

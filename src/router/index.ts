@@ -47,6 +47,14 @@ const routes: Array<RouteConfig> = [
           import(/* webpackChunkName: "menu-edit" */ '../views/menu/Edit.vue'),
       },
       {
+        path: '/resource',
+        name: 'ResourceIndex',
+        component: () =>
+          import(
+            /* webpackChunkName: "resource" */ '../views/resource/index.vue'
+          ),
+      },
+      {
         path: '*',
         name: 'ErrorPage',
         component: () =>

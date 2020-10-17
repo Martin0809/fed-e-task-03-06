@@ -15,7 +15,16 @@ body {
   }
 }
 
+.search-operator {
+  text-align: right;
+}
+
 .operate-bar {
   margin-bottom: 20px;
+  text-align: right;
+}
+
+.el-pagination {
+  margin-top: 20px;
   text-align: right;
 }

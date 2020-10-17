@@ -1,7 +1,7 @@
 <template>
   <el-card v-loading="isLoading" shadow="never">
     <div class="operate-bar">
-      <el-button size="mini" @click="addMenu">添加菜单</el-button>
+      <el-button @click="addMenu">添加菜单</el-button>
     </div>
     <el-table :data="menus" border stripe style="width: 100%">
       <el-table-column prop="id" label="编号" align="center" />
@@ -50,13 +50,15 @@ export default Vue.extend({
     async fetchMenus() {
       this.isLoading = true
 
-      const { data } = await getAllMenu()
+      try {
+        const { data } = await getAllMenu()
 
-      if (data.code === '000000') {
-        this.menus = data.data
+        if (data.code === '000000') {
+          this.menus = data.data
+        }
+      } finally {
+        this.isLoading = false
       }
-
-      this.isLoading = false
     },
     addMenu() {
       this.$router.push({
