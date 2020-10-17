@@ -38,7 +38,7 @@ export default Vue.extend({
       userInfo: {},
     }
   },
-  created() {
+  mounted() {
     this.fetchUserInfo()
   },
   methods: {

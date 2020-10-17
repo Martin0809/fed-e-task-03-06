@@ -27,6 +27,28 @@ const routes: Array<RouteConfig> = [
           import(/* webpackChunkName: "home" */ '../views/Home.vue'),
       },
       {
+        path: '/menu',
+        name: 'MenuIndex',
+        component: () =>
+          import(/* webpackChunkName: "home" */ '../views/menu/index.vue'),
+      },
+      {
+        path: '/menu/add',
+        name: 'CreateOrEdit',
+        component: () =>
+          import(
+            /* webpackChunkName: "home" */ '../views/menu/CreateOrEdit.vue'
+          ),
+      },
+      {
+        path: '/menu/:id/edit',
+        name: 'CreateOrEdit',
+        component: () =>
+          import(
+            /* webpackChunkName: "home" */ '../views/menu/CreateOrEdit.vue'
+          ),
+      },
+      {
         path: '*',
         name: 'ErrorPage',
         component: () =>

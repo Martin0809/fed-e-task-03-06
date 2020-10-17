@@ -9,6 +9,16 @@ import '@/styles/index.scss'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
+Vue.filter('level2word', (level: number): string => {
+  const map = ['一', '二', '三']
+
+  return `${map[level]}级`
+})
+
+Vue.filter('formatUrl', (value: string): string => {
+  return `/${value.toLowerCase()}`
+})
+
 new Vue({
   router,
   store,

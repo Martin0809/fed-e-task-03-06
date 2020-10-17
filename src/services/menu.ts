@@ -7,3 +7,22 @@ export function getMenuNodeList() {
 export function getAllMenu() {
   return request.get('/boss/menu/getAll')
 }
+
+export function getMenuInfo(id = -1) {
+  return request.get('/boss/menu/getEditMenuInfo', {
+    params: { id },
+  })
+}
+
+export function createOrUpdateMenu(params: {
+  id?: number
+  name: string
+  href: string
+  parentId: number
+  description: string
+  icon: string
+  shown: boolean
+  orderNum: number
+}) {
+  return request.post('/boss/menu/saveOrUpdate', params)
+}

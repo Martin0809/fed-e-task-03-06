@@ -1,9 +1,7 @@
 <template>
-  <el-card shadow="never">
-    <div class="home">
-      <img alt="Vue logo" src="../assets/logo.png" />
-      <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-    </div>
+  <el-card class="home" shadow="never">
+    <img alt="Vue logo" src="../assets/logo.png" />
+    <HelloWorld msg="Welcome to Your Management Platform" />
   </el-card>
 </template>
 
@@ -21,6 +19,10 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
   text-align: center;
 }
 </style>

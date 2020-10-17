@@ -9,8 +9,6 @@
       active-text-color="#ffd04b"
       router
       :collapse="isCollapse"
-      @open="handleOpen"
-      @close="handleClose"
     >
       <template v-for="menu in menus">
         <el-submenu
@@ -28,7 +26,7 @@
           <el-menu-item
             v-for="subMenu in menu.subMenuList.filter((item) => item.shown)"
             :key="subMenu.id"
-            :index="`/${subMenu.href.toLowerCase()}`"
+            :index="subMenu.href | formatUrl"
           >
             <template slot="title">
               <i :class="`el-icon-${subMenu.icon}`"></i>
