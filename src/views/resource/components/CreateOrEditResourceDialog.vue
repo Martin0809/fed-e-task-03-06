@@ -84,7 +84,7 @@ import { Form } from 'element-ui'
 import { getResource, createOrSaveResource } from '@/services/resource'
 
 export default Vue.extend({
-  name: 'CreateOrEditDialog',
+  name: 'CreateOrEditResourceDialog',
   props: {
     visible: {
       type: Boolean,

@@ -8,6 +8,7 @@
       text-color="#fff"
       active-text-color="#ffd04b"
       router
+      :default-active="$route.path"
       :collapse="isCollapse"
     >
       <template v-for="menu in menus">

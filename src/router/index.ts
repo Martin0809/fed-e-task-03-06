@@ -55,6 +55,14 @@ const routes: Array<RouteConfig> = [
           ),
       },
       {
+        path: '/resource/category',
+        name: 'ResourceCategory',
+        component: () =>
+          import(
+            /* webpackChunkName: "resource-category" */ '../views/resource/Category.vue'
+          ),
+      },
+      {
         path: '*',
         name: 'ErrorPage',
         component: () =>

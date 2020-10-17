@@ -4,6 +4,18 @@ export function getAllCategory() {
   return request.get('/boss/resource/category/getAll')
 }
 
+export function createOrSaveCategory(params: {
+  id?: number
+  name: string
+  sort: number
+}) {
+  return request.post('/boss/resource/category/saveOrderUpdate', params)
+}
+
+export function deleteCategory(id: number | string) {
+  return request.delete(`/boss/resource/category/${id}`)
+}
+
 export function getAllResource(
   params: {
     id?: number | string

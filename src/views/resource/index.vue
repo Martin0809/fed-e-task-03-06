@@ -41,7 +41,9 @@
     <el-card v-loading="isLoading" shadow="never">
       <div class="operate-bar">
         <el-button @click="handleAdd">添加资源</el-button>
-        <el-button>资源分类</el-button>
+        <router-link to="/resource/category">
+          <el-button>资源分类</el-button>
+        </router-link>
       </div>
       <el-table border stripe style="width: 100%" :data="resources">
         <el-table-column prop="id" label="编号" align="center" />
@@ -79,7 +81,7 @@
         @current-change="handleCurrentChange"
       />
     </el-card>
-    <create-or-edit-dialog
+    <create-or-edit-resource-dialog
       :visible.sync="visible"
       :id="id"
       :categories="categories"
@@ -97,12 +99,12 @@ import {
   getAllCategory,
   deleteResource,
 } from '@/services/resource'
-import CreateOrEditDialog from './components/CreateOrEditDialog.vue'
+import CreateOrEditResourceDialog from './components/CreateOrEditResourceDialog.vue'
 
 export default Vue.extend({
   name: 'ResourceIndex',
   components: {
-    CreateOrEditDialog,
+    CreateOrEditResourceDialog,
   },
   data() {
     return {
